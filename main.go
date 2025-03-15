@@ -10,6 +10,7 @@ import (
 	"merlin/pkg/utils"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/anthropic"
 )
@@ -49,7 +50,7 @@ func main() {
 	for {
 		// Prompt user for question
 		if !toolsCalled {
-			fmt.Printf("> ")
+			fmt.Print(color.GreenString("> "))
 			reader := bufio.NewReader(os.Stdin)
 			userInput, _ := reader.ReadString('\n')
 			if userInput == "/exit\n" {
@@ -80,7 +81,9 @@ func main() {
 
 		for _, choice := range res.Choices {
 
-			fmt.Printf("Agent says: %v\n", choice.Content)
+			if choice.Content != "" {
+				fmt.Printf("%s: %v\n", color.BlueString("Agent says"), choice.Content)
+			}
 
 			if choice.ToolCalls == nil {
 				continue
